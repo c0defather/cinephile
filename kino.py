@@ -1,10 +1,12 @@
 import json
 import sys
+import time
 from typing import Literal
 
 from pydantic import BaseModel
 
 LIMIT = 2000
+PRICE = {"gpt-6-luna": (0.10, 0.50), "gpt-6-astra": (10.00, 50.00)}  # $ за миллион токенов: вход, выход
 INSTRUCTIONS = """Ты помощник по выбору фильма. Нужно подобрать от одного до трёх фильмов
 из <каталог> под условия из <запрос>. Без вступления, Markdown и эмодзи.
 
@@ -44,6 +46,31 @@ def build_messages(films, query):
             f"<запрос>{query}</запрос>")
     return [{"role": "system", "content": INSTRUCTIONS},
             {"role": "user", "content": data}]
+
+
+def log(model, step, query, films, outcome, started, completion=None, rejected=None):
+    """Одна строка в calls.jsonl. В request запрос и id каталога, не весь каталог."""
+    ids = [film["id"] for film in films]
+    row = {
+        "time": time.strftime("%H:%M:%S"),
+        "model": model,
+        "step": step,
+        "request": f"{query} | каталог: {json.dumps(ids, ensure_ascii=False)}",
+        "outcome": outcome,
+        "seconds": round(time.time() - started, 1),
+    }
+    if rejected is not None:
+        row["rejected"] = rejected
+    if completion and completion.usage:
+        usage = completion.usage
+        price_in, price_out = PRICE.get(model, (0, 0))
+        row["id"] = completion.id
+        row["usage"] = usage.model_dump()
+        row["usd"] = (usage.prompt_tokens * price_in
+                      + usage.completion_tokens * price_out) / 1_000_000
+    with open("calls.jsonl", "a", encoding="utf-8") as file:
+        file.write(json.dumps(row, ensure_ascii=False) + "\n")
+    return row
 
 
 def check_ids(picks, films):
