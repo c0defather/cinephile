@@ -75,8 +75,8 @@ class Filters(BaseModel):
 
 def vocabulary(films):
     """Жанры и языки переданного каталога: модель пишет условия этими словами."""
-    genres = sorted({genre for film in films for genre in film["genres"]})
-    languages = sorted({language for film in films for language in film["languages"]})
+    genres = sorted({genre for film in films for genre in film.get("genres", [])})
+    languages = sorted({language for film in films for language in film.get("languages", [])})
     return genres, languages
 
 
@@ -101,7 +101,7 @@ def matches(film, filters):
         return False
     if filters.year_to is not None and film["year"] > filters.year_to:
         return False
-    genres, languages = set(film["genres"]), set(film["languages"])
+    genres, languages = set(film.get("genres", [])), set(film.get("languages", []))
     if words(filters.languages) and not languages & words(filters.languages):
         return False
     if genres & words(filters.exclude_genres):
@@ -122,7 +122,7 @@ def build_messages(films, query):
             {"role": "user", "content": data}]
 
 
-def log(model, step, query, films, outcome, started, completion=None, rejected=None):
+def log(model, step, query, films, outcome, started, completion=None, rejected=None, violations=None):
     """Одна строка в calls.jsonl. В request запрос и id каталога, не весь каталог."""
     ids = [film["id"] for film in films]
     row = {
@@ -135,6 +135,8 @@ def log(model, step, query, films, outcome, started, completion=None, rejected=N
     }
     if rejected is not None:
         row["rejected"] = rejected
+    if violations is not None:
+        row["violations"] = violations
     if completion and completion.usage:
         usage = completion.usage
         price_in, price_out = PRICE.get(model, (0, 0))
@@ -169,60 +171,92 @@ def show(film, why):
     print(f"Почему: {why}\n")
 
 
-def pick(client, model, query, films, effort="none"):
-    """Подбор фильмов под запрос. Возвращает (исход, id показанных фильмов)."""
-    started = time.time()
-
-    def end(outcome, completion=None, rejected=None):
-        log(model, "choice", query, films, outcome, started, completion, rejected)
-        return outcome, []
-
+def call(client, model, messages, schema, effort):
+    """Один вызов модели. Возвращает (исход, completion); ответ разобран, только если исход ok."""
     try:
         completion = client.chat.completions.parse(
             model=model,
-            messages=build_messages(films, query),
-            response_format=Choice,
+            messages=messages,
+            response_format=schema,
             max_completion_tokens=LIMIT,
             reasoning_effort=effort,
         )
     except openai.APIConnectionError:
         print("Нет связи с сервером")
-        return end("no_connection")
+        return "no_connection", None
     except openai.APIStatusError as error:
         print("Ошибка API:", error.message)
-        return end(f"error_{error.status_code}")
+        return f"error_{error.status_code}", None
     except openai.LengthFinishReasonError as error:
         print("Ответ обрезан на лимите токенов")
-        return end("length", error.completion)
+        return "length", error.completion
     except openai.ContentFilterFinishReasonError:
         print("Модель отказалась отвечать")
-        return end("refusal")
+        return "refusal", None
     except ValidationError:
         print("Ответ модели не по схеме")
-        return end("invalid", rejected=[])
+        return "invalid", None
     if not completion.choices:
         print("Пустой ответ модели")
-        return end("invalid", completion, [])
+        return "invalid", completion
     message = completion.choices[0].message
     if message.refusal:
         print("Модель отказалась:", message.refusal)
-        return end("refusal", completion)
-    choice = message.parsed
-    if choice is None:
+        return "refusal", completion
+    if message.parsed is None:
         print("Ответ модели не по схеме")
-        return end("invalid", completion, [])
+        return "invalid", completion
+    return "ok", completion
+
+
+def pick(client, model, query, films, effort="none"):
+    """Подбор фильмов под запрос. Возвращает (исход, id показанных фильмов).
+
+    Первый вызов (filters) разбирает условия, код отбирает фильмы, второй (choice) выбирает среди них."""
+    started = time.time()
+    outcome, completion = call(client, model, build_filter_messages(films, query), Filters, effort)
+    if outcome != "ok":
+        log(model, "filters", query, films, outcome, started, completion,
+            rejected=[] if outcome == "invalid" else None)
+        return outcome, []
+    filters = completion.choices[0].message.parsed
+    candidates = apply_filters(films, filters)
+    if not candidates:
+        print("Ничего не подходит: в каталоге нет фильмов под условия запроса")
+        log(model, "filters", query, films, "no_match", started, completion)
+        return "no_match", []
+    log(model, "filters", query, films, "ok", started, completion)
+
+    started = time.time()
+
+    def end(outcome, completion=None, rejected=None, violations=None):
+        log(model, "choice", query, candidates, outcome, started, completion, rejected, violations)
+        return outcome, []
+
+    outcome, completion = call(client, model, build_messages(candidates, query), Choice, effort)
+    if outcome == "invalid":
+        return end(outcome, completion, [])
+    if outcome != "ok":
+        return end(outcome, completion)
+    choice = completion.choices[0].message.parsed
     if choice.status == "no_match":
         print("Ничего не подходит:", choice.reason)
         return end("no_match", completion)
 
-    problem, rejected = check_ids(choice.picks, films)
+    problem, rejected = check_ids(choice.picks, films)  # чужие id: по всему каталогу
+    violations = []
+    if not problem:
+        by_id = {str(film["id"]): film for film in films}
+        violations = [str(item.film_id) for item in choice.picks
+                      if not matches(by_id[str(item.film_id)], filters)]  # пересверка с условиями
+        if violations:
+            problem = "фильм не подходит под условия запроса"
     if problem:
         print("Проверка ответа:", problem)
-        return end("invalid", completion, rejected)
-    by_id = {str(film["id"]): film for film in films}
+        return end("invalid", completion, rejected, violations or None)
     for item in choice.picks:
         show(by_id[str(item.film_id)], item.why)
-    log(model, "choice", query, films, "ok", started, completion)
+    log(model, "choice", query, candidates, "ok", started, completion)
     return "ok", [by_id[str(item.film_id)]["id"] for item in choice.picks]
 
 
