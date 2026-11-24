@@ -245,7 +245,10 @@ def test_nothing_passes_the_filters(capsys, tmp_path):
     assert (outcome, ids) == ("no_match", [])
     assert "Ничего не подходит" in capsys.readouterr().out
     assert len(client.calls) == 1  # второй вызов не нужен
-    assert [(r["step"], r["outcome"]) for r in rows_of(tmp_path)] == [("filters", "no_match")]
+    # запрос кончается строкой choice, даже когда второй вызов не нужен: так его считают show.py и автопроверка
+    rows = rows_of(tmp_path)
+    assert [(r["step"], r["outcome"]) for r in rows] == [("filters", "ok"), ("choice", "no_match")]
+    assert "usage" not in rows[1] and "t-1" not in rows[1]["request"].split("каталог:")[1]
 
 
 def test_unknown_language_means_no_match():

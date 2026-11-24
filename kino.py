@@ -225,7 +225,8 @@ def pick(client, model, query, films, effort="none"):
     candidates = apply_filters(films, filters)
     if not candidates:
         print("Ничего не подходит: в каталоге нет фильмов под условия запроса")
-        log(model, "filters", query, films, "no_match", started, completion)
+        log(model, "filters", query, films, "ok", started, completion)
+        log(model, "choice", query, [], "no_match", time.time())  # второй вызов не нужен, запрос закрыт строкой choice
         return "no_match", []
     log(model, "filters", query, films, "ok", started, completion)
 
