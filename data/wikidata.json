@@ -1,0 +1,988 @@
+[
+ {
+  "title": "Интерстеллар",
+  "year": 2014,
+  "minutes": 169,
+  "genres": [
+   "драма",
+   "приключения",
+   "фантастика",
+   "триллер"
+  ],
+  "countries": [
+   "Великобритания",
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q13417189",
+  "article": "https://ru.wikipedia.org/wiki/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%81%D1%82%D0%B5%D0%BB%D0%BB%D0%B0%D1%80"
+ },
+ {
+  "title": "Начало",
+  "year": 2010,
+  "minutes": 148,
+  "genres": [
+   "драма",
+   "боевик",
+   "приключения",
+   "фантастика",
+   "триллер"
+  ],
+  "countries": [
+   "Великобритания",
+   "США"
+  ],
+  "languages": [
+   "французский",
+   "английский",
+   "японский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q25188",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9D%D0%B0%D1%87%D0%B0%D0%BB%D0%BE_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC,_2010)"
+ },
+ {
+  "title": "Матрица",
+  "year": 1999,
+  "minutes": 136,
+  "genres": [
+   "боевик",
+   "фантастика",
+   "триллер",
+   "криминал"
+  ],
+  "countries": [
+   "Австралия",
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q83495",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9C%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Форрест Гамп",
+  "year": 1994,
+  "minutes": 142,
+  "genres": [
+   "драма",
+   "комедия",
+   "мелодрама",
+   "исторический"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q134773",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A4%D0%BE%D1%80%D1%80%D0%B5%D1%81%D1%82_%D0%93%D0%B0%D0%BC%D0%BF"
+ },
+ {
+  "title": "Побег из Шоушенка",
+  "year": 1994,
+  "minutes": 142,
+  "genres": [
+   "драма",
+   "криминал"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q172241",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D0%B1%D0%B5%D0%B3_%D0%B8%D0%B7_%D0%A8%D0%BE%D1%83%D1%88%D0%B5%D0%BD%D0%BA%D0%B0"
+ },
+ {
+  "title": "Крёстный отец",
+  "year": 1972,
+  "minutes": 175,
+  "genres": [
+   "драма",
+   "триллер",
+   "криминал",
+   "исторический"
+  ],
+  "countries": [
+   "Италия",
+   "США"
+  ],
+  "languages": [
+   "итальянский",
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q47703",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9A%D1%80%D1%91%D1%81%D1%82%D0%BD%D1%8B%D0%B9_%D0%BE%D1%82%D0%B5%D1%86_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Леон",
+  "year": 1994,
+  "minutes": 110,
+  "genres": [
+   "драма",
+   "боевик",
+   "триллер",
+   "криминал"
+  ],
+  "countries": [
+   "Франция",
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q484675",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9B%D0%B5%D0%BE%D0%BD_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Один дома",
+  "year": 1990,
+  "minutes": 103,
+  "genres": [
+   "комедия",
+   "приключения",
+   "семейный"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q105031",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9E%D0%B4%D0%B8%D0%BD_%D0%B4%D0%BE%D0%BC%D0%B0"
+ },
+ {
+  "title": "Назад в будущее",
+  "year": 1985,
+  "minutes": 115,
+  "genres": [
+   "комедия",
+   "приключения",
+   "фантастика"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q91540",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9D%D0%B0%D0%B7%D0%B0%D0%B4_%D0%B2_%D0%B1%D1%83%D0%B4%D1%83%D1%89%D0%B5%D0%B5"
+ },
+ {
+  "title": "Шоу Трумана",
+  "year": 1998,
+  "minutes": 99,
+  "genres": [
+   "драма",
+   "комедия",
+   "фантастика"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q214801",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A8%D0%BE%D1%83_%D0%A2%D1%80%D1%83%D0%BC%D0%B0%D0%BD%D0%B0"
+ },
+ {
+  "title": "Зелёная миля",
+  "year": 1999,
+  "minutes": 189,
+  "genres": [
+   "драма",
+   "фэнтези"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q208263",
+  "article": "https://ru.wikipedia.org/wiki/%D0%97%D0%B5%D0%BB%D1%91%D0%BD%D0%B0%D1%8F_%D0%BC%D0%B8%D0%BB%D1%8F_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Гравитация",
+  "year": 2013,
+  "minutes": 91,
+  "genres": [
+   "драма",
+   "фантастика",
+   "триллер",
+   "ужасы"
+  ],
+  "countries": [
+   "Великобритания",
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q2579784",
+  "article": "https://ru.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D0%B0%D1%86%D0%B8%D1%8F_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Марсианин",
+  "year": 2015,
+  "minutes": 141,
+  "genres": [
+   "драма",
+   "боевик",
+   "приключения",
+   "фантастика"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q18547944",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9C%D0%B0%D1%80%D1%81%D0%B8%D0%B0%D0%BD%D0%B8%D0%BD_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Паразиты",
+  "year": 2019,
+  "minutes": 132,
+  "genres": [
+   "драма",
+   "комедия",
+   "триллер"
+  ],
+  "countries": [
+   "Республика Корея"
+  ],
+  "languages": [
+   "корейский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q61448040",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9F%D0%B0%D1%80%D0%B0%D0%B7%D0%B8%D1%82%D1%8B_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Амели",
+  "year": 2001,
+  "minutes": 122,
+  "genres": [
+   "драма",
+   "комедия",
+   "мелодрама"
+  ],
+  "countries": [
+   "Франция"
+  ],
+  "languages": [
+   "французский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q484048",
+  "article": "https://ru.wikipedia.org/wiki/%D0%90%D0%BC%D0%B5%D0%BB%D0%B8"
+ },
+ {
+  "title": "Жизнь прекрасна",
+  "year": 1997,
+  "minutes": 116,
+  "genres": [
+   "драма",
+   "комедия"
+  ],
+  "countries": [
+   "Италия"
+  ],
+  "languages": [
+   "итальянский",
+   "немецкий"
+  ],
+  "source": "http://www.wikidata.org/entity/Q19355",
+  "article": "https://ru.wikipedia.org/wiki/%D0%96%D0%B8%D0%B7%D0%BD%D1%8C_%D0%BF%D1%80%D0%B5%D0%BA%D1%80%D0%B0%D1%81%D0%BD%D0%B0_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC,_1997)"
+ },
+ {
+  "title": "Ла-Ла Ленд",
+  "year": 2016,
+  "minutes": 128,
+  "genres": [
+   "драма",
+   "комедия",
+   "мелодрама"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q20856802",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9B%D0%B0-%D0%9B%D0%B0_%D0%9B%D0%B5%D0%BD%D0%B4"
+ },
+ {
+  "title": "Король Лев",
+  "year": 1994,
+  "minutes": 88,
+  "genres": [
+   "драма",
+   "приключения",
+   "семейный"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q36479",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D1%80%D0%BE%D0%BB%D1%8C_%D0%9B%D0%B5%D0%B2"
+ },
+ {
+  "title": "Тайна Коко",
+  "year": 2017,
+  "minutes": 109,
+  "genres": [
+   "драма",
+   "комедия",
+   "приключения",
+   "фэнтези",
+   "мелодрама",
+   "семейный",
+   "детектив"
+  ],
+  "countries": [
+   "Мексика",
+   "США"
+  ],
+  "languages": [
+   "английский",
+   "испанский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q5815826",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A2%D0%B0%D0%B9%D0%BD%D0%B0_%D0%9A%D0%BE%D0%BA%D0%BE"
+ },
+ {
+  "title": "Шрек",
+  "year": 2001,
+  "minutes": 90,
+  "genres": [
+   "приключения",
+   "фэнтези"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q483815",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A8%D1%80%D0%B5%D0%BA_(%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "12 разгневанных мужчин",
+  "year": 1957,
+  "minutes": 95,
+  "genres": [
+   "драма"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q2345",
+  "article": "https://ru.wikipedia.org/wiki/12_%D1%80%D0%B0%D0%B7%D0%B3%D0%BD%D0%B5%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D1%85_%D0%BC%D1%83%D0%B6%D1%87%D0%B8%D0%BD_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC,_1957)"
+ },
+ {
+  "title": "Психо",
+  "year": 1960,
+  "minutes": 109,
+  "genres": [
+   "драма",
+   "триллер",
+   "ужасы",
+   "криминал"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q163038",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9F%D1%81%D0%B8%D1%85%D0%BE"
+ },
+ {
+  "title": "Сияние",
+  "year": 1980,
+  "minutes": 119,
+  "genres": [
+   "драма",
+   "триллер",
+   "ужасы"
+  ],
+  "countries": [
+   "Великобритания",
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q186341",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A1%D0%B8%D1%8F%D0%BD%D0%B8%D0%B5_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC,_1980)"
+ },
+ {
+  "title": "Чужой",
+  "year": 1979,
+  "minutes": 117,
+  "genres": [
+   "боевик",
+   "приключения",
+   "фантастика",
+   "фэнтези",
+   "триллер",
+   "ужасы"
+  ],
+  "countries": [
+   "Великобритания",
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q103569",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A7%D1%83%D0%B6%D0%BE%D0%B9_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Бегущий по лезвию",
+  "year": 1982,
+  "minutes": 112,
+  "genres": [
+   "драма",
+   "боевик",
+   "фантастика",
+   "триллер",
+   "криминал"
+  ],
+  "countries": [
+   "Гонконг",
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q184843",
+  "article": "https://ru.wikipedia.org/wiki/%D0%91%D0%B5%D0%B3%D1%83%D1%89%D0%B8%D0%B9_%D0%BF%D0%BE_%D0%BB%D0%B5%D0%B7%D0%B2%D0%B8%D1%8E"
+ },
+ {
+  "title": "Семь самураев",
+  "year": 1954,
+  "minutes": 207,
+  "genres": [
+   "драма",
+   "боевик",
+   "приключения",
+   "исторический"
+  ],
+  "countries": [
+   "Япония"
+  ],
+  "languages": [
+   "японский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q189540",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A1%D0%B5%D0%BC%D1%8C_%D1%81%D0%B0%D0%BC%D1%83%D1%80%D0%B0%D0%B5%D0%B2"
+ },
+ {
+  "title": "В джазе только девушки",
+  "year": 1959,
+  "minutes": 120,
+  "genres": [
+   "драма",
+   "комедия",
+   "криминал",
+   "мелодрама"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q190086",
+  "article": "https://ru.wikipedia.org/wiki/%D0%92_%D0%B4%D0%B6%D0%B0%D0%B7%D0%B5_%D1%82%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE_%D0%B4%D0%B5%D0%B2%D1%83%D1%88%D0%BA%D0%B8"
+ },
+ {
+  "title": "Титаник",
+  "year": 1997,
+  "minutes": 194,
+  "genres": [
+   "драма",
+   "мелодрама",
+   "исторический"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q44578",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A2%D0%B8%D1%82%D0%B0%D0%BD%D0%B8%D0%BA_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC,_1997)"
+ },
+ {
+  "title": "Касабланка",
+  "year": 1942,
+  "minutes": 102,
+  "genres": [
+   "драма",
+   "криминал",
+   "мелодрама",
+   "военный"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q132689",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%81%D0%B0%D0%B1%D0%BB%D0%B0%D0%BD%D0%BA%D0%B0_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Хороший, плохой, злой",
+  "year": 1966,
+  "minutes": 174,
+  "genres": [
+   "драма",
+   "боевик",
+   "военный",
+   "вестерн"
+  ],
+  "countries": [
+   "Германия",
+   "Италия",
+   "Испания"
+  ],
+  "languages": [
+   "итальянский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q41483",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A5%D0%BE%D1%80%D0%BE%D1%88%D0%B8%D0%B9,_%D0%BF%D0%BB%D0%BE%D1%85%D0%BE%D0%B9,_%D0%B7%D0%BB%D0%BE%D0%B9"
+ },
+ {
+  "title": "Брат",
+  "year": 1997,
+  "minutes": 95,
+  "genres": [
+   "драма",
+   "триллер",
+   "криминал"
+  ],
+  "countries": [
+   "Россия"
+  ],
+  "languages": [
+   "французский",
+   "английский",
+   "русский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q1192679",
+  "article": "https://ru.wikipedia.org/wiki/%D0%91%D1%80%D0%B0%D1%82_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC,_1997)"
+ },
+ {
+  "title": "Иван Васильевич меняет профессию",
+  "year": 1973,
+  "minutes": 88,
+  "genres": [
+   "комедия",
+   "приключения",
+   "фантастика"
+  ],
+  "countries": [
+   "СССР"
+  ],
+  "languages": [
+   "русский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q777739",
+  "article": "https://ru.wikipedia.org/wiki/%D0%98%D0%B2%D0%B0%D0%BD_%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%B5%D0%B2%D0%B8%D1%87_%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D1%82_%D0%BF%D1%80%D0%BE%D1%84%D0%B5%D1%81%D1%81%D0%B8%D1%8E"
+ },
+ {
+  "title": "Белое солнце пустыни",
+  "year": 1970,
+  "minutes": 83,
+  "genres": [
+   "комедия",
+   "приключения",
+   "мелодрама",
+   "военный"
+  ],
+  "countries": [
+   "СССР"
+  ],
+  "languages": [
+   "русский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q2306068",
+  "article": "https://ru.wikipedia.org/wiki/%D0%91%D0%B5%D0%BB%D0%BE%D0%B5_%D1%81%D0%BE%D0%BB%D0%BD%D1%86%D0%B5_%D0%BF%D1%83%D1%81%D1%82%D1%8B%D0%BD%D0%B8"
+ },
+ {
+  "title": "Москва слезам не верит",
+  "year": 1980,
+  "minutes": 140,
+  "genres": [
+   "драма",
+   "комедия",
+   "мелодрама"
+  ],
+  "countries": [
+   "СССР"
+  ],
+  "languages": [
+   "русский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q53105",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0_%D1%81%D0%BB%D0%B5%D0%B7%D0%B0%D0%BC_%D0%BD%D0%B5_%D0%B2%D0%B5%D1%80%D0%B8%D1%82"
+ },
+ {
+  "title": "Сталкер",
+  "year": 1979,
+  "minutes": 163,
+  "genres": [
+   "драма",
+   "фантастика"
+  ],
+  "countries": [
+   "СССР"
+  ],
+  "languages": [
+   "русский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q200437",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A1%D1%82%D0%B0%D0%BB%D0%BA%D0%B5%D1%80_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Летят журавли",
+  "year": 1957,
+  "minutes": 97,
+  "genres": [
+   "драма",
+   "мелодрама",
+   "военный"
+  ],
+  "countries": [
+   "СССР"
+  ],
+  "languages": [
+   "русский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q714524",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9B%D0%B5%D1%82%D1%8F%D1%82_%D0%B6%D1%83%D1%80%D0%B0%D0%B2%D0%BB%D0%B8"
+ },
+ {
+  "title": "Служебный роман",
+  "year": 1977,
+  "minutes": 151,
+  "genres": [
+   "драма",
+   "комедия",
+   "мелодрама"
+  ],
+  "countries": [
+   "СССР"
+  ],
+  "languages": [
+   "русский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q2528155",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D1%8B%D0%B9_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD"
+ },
+ {
+  "title": "Тёмный рыцарь",
+  "year": 2008,
+  "minutes": 155,
+  "genres": [
+   "драма",
+   "боевик",
+   "триллер",
+   "криминал"
+  ],
+  "countries": [
+   "Великобритания",
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q163872",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A2%D1%91%D0%BC%D0%BD%D1%8B%D0%B9_%D1%80%D1%8B%D1%86%D0%B0%D1%80%D1%8C_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Список Шиндлера",
+  "year": 1993,
+  "minutes": 195,
+  "genres": [
+   "драма",
+   "военный",
+   "исторический",
+   "биография"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q483941",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%A8%D0%B8%D0%BD%D0%B4%D0%BB%D0%B5%D1%80%D0%B0"
+ },
+ {
+  "title": "Молчание ягнят",
+  "year": 1991,
+  "minutes": 118,
+  "genres": [
+   "драма",
+   "триллер",
+   "ужасы",
+   "криминал"
+  ],
+  "countries": [
+   "США"
+  ],
+  "languages": [
+   "английский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q133654",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D0%BB%D1%87%D0%B0%D0%BD%D0%B8%D0%B5_%D1%8F%D0%B3%D0%BD%D1%8F%D1%82_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Рэкетир",
+  "year": 2007,
+  "minutes": 80,
+  "genres": [
+   "драма",
+   "криминал"
+  ],
+  "countries": [
+   "Казахстан"
+  ],
+  "languages": [
+   "русский",
+   "казахский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q4402211",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A0%D1%8D%D0%BA%D0%B5%D1%82%D0%B8%D1%80_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Кочевник",
+  "year": 2005,
+  "minutes": 122,
+  "genres": [
+   "драма",
+   "приключения",
+   "биография"
+  ],
+  "countries": [
+   "Казахстан",
+   "Франция"
+  ],
+  "languages": [
+   "русский",
+   "казахский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q1325503",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D1%87%D0%B5%D0%B2%D0%BD%D0%B8%D0%BA_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Тюльпан",
+  "year": 2008,
+  "minutes": 100,
+  "genres": [
+   "драма",
+   "комедия"
+  ],
+  "countries": [
+   "Россия",
+   "Казахстан",
+   "Германия",
+   "Швейцария",
+   "Польша"
+  ],
+  "languages": [
+   "русский",
+   "казахский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q584029",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A2%D1%8E%D0%BB%D1%8C%D0%BF%D0%B0%D0%BD_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Айка",
+  "year": 2018,
+  "minutes": 114,
+  "genres": [
+   "драма"
+  ],
+  "countries": [
+   "Россия",
+   "Казахстан",
+   "Германия",
+   "Китай",
+   "Польша"
+  ],
+  "languages": [
+   "русский",
+   "киргизский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q52009401",
+  "article": "https://ru.wikipedia.org/wiki/%D0%90%D0%B9%D0%BA%D0%B0_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Аманат",
+  "year": 2016,
+  "minutes": 127,
+  "genres": [
+   "драма"
+  ],
+  "countries": [
+   "Казахстан"
+  ],
+  "languages": [
+   "русский",
+   "казахский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q27048815",
+  "article": "https://ru.wikipedia.org/wiki/%D0%90%D0%BC%D0%B0%D0%BD%D0%B0%D1%82_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC,_2015)"
+ },
+ {
+  "title": "Подарок Сталину",
+  "year": 2008,
+  "minutes": 97,
+  "genres": [
+   "драма"
+  ],
+  "countries": [
+   "Израиль",
+   "Россия",
+   "Казахстан",
+   "Польша"
+  ],
+  "languages": [
+   "русский",
+   "казахский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q2658852",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D0%B4%D0%B0%D1%80%D0%BE%D0%BA_%D0%A1%D1%82%D0%B0%D0%BB%D0%B8%D0%BD%D1%83"
+ },
+ {
+  "title": "Старик",
+  "year": 2012,
+  "minutes": 102,
+  "genres": [
+   "драма"
+  ],
+  "countries": [
+   "Казахстан"
+  ],
+  "languages": [
+   "казахский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q4439869",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A8%D0%B0%D0%BB"
+ },
+ {
+  "title": "Томирис",
+  "year": 2019,
+  "minutes": 155,
+  "genres": [
+   "драма",
+   "исторический"
+  ],
+  "countries": [
+   "Казахстан"
+  ],
+  "languages": [
+   "русский",
+   "казахский",
+   "древнеперсидский",
+   "пратюркский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q91229758",
+  "article": "https://ru.wikipedia.org/wiki/%D0%A2%D0%BE%D0%BC%D0%B8%D1%80%D0%B8%D1%81_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Жаужурек мын бала",
+  "year": 2011,
+  "minutes": 132,
+  "genres": [
+   "драма"
+  ],
+  "countries": [
+   "Казахстан"
+  ],
+  "languages": [
+   "казахский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q3719600",
+  "article": "https://ru.wikipedia.org/wiki/%D0%92%D0%BE%D0%B9%D1%81%D0%BA%D0%BE_%D0%9C%D1%8B%D0%BD_%D0%91%D0%B0%D0%BB%D0%B0_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Прощай, Гульсары!",
+  "year": 2008,
+  "minutes": 102,
+  "genres": [
+   "драма"
+  ],
+  "countries": [
+   "Казахстан"
+  ],
+  "languages": [
+   "казахский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q4382368",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D1%89%D0%B0%D0%B9,_%D0%93%D1%83%D0%BB%D1%8C%D1%81%D0%B0%D1%80%D1%8B!_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Монгол",
+  "year": 2007,
+  "minutes": 120,
+  "genres": [
+   "драма",
+   "военный",
+   "исторический",
+   "биография"
+  ],
+  "countries": [
+   "Россия",
+   "Казахстан",
+   "Германия"
+  ],
+  "languages": [
+   "русский",
+   "китайский",
+   "монгольский"
+  ],
+  "source": "http://www.wikidata.org/entity/Q733059",
+  "article": "https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D0%BD%D0%B3%D0%BE%D0%BB_(%D1%84%D0%B8%D0%BB%D1%8C%D0%BC)"
+ },
+ {
+  "title": "Бизнес по-казахски",
+  "year": 2016,
+  "minutes": 90,
+  "genres": [
+   "комедия"
+  ],
+  "countries": [
+   "Казахстан"
+  ],
+  "languages": [
+   "казахский",
+   "русский"
+  ],
+  "source": "https://en.wikipedia.org/wiki/Kazakh_Business",
+  "article": ""
+ }
+]
