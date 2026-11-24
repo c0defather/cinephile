@@ -1,11 +1,17 @@
 import json
+import os
+import re
 import sys
 import time
 from typing import Literal
 
 import openai
+from dotenv import load_dotenv
 from pydantic import BaseModel, ValidationError
 
+CLOUD_MODEL = "gpt-6-luna"
+LOCAL_MODEL = "qwen3.5:4b"
+OLLAMA_URL = "http://127.0.0.1:11434/v1"
 LIMIT = 2000
 PRICE = {"gpt-6-luna": (0.10, 0.50), "gpt-6-astra": (10.00, 50.00)}  # $ за миллион токенов: вход, выход
 INSTRUCTIONS = """Ты помощник по выбору фильма. Нужно подобрать от одного до трёх фильмов
@@ -153,6 +159,35 @@ def pick(client, model, query, films, effort="none"):
     return "ok", [by_id[str(item.film_id)]["id"] for item in choice.picks]
 
 
+def make_clients(env):
+    """Облачный клиент (None без ключа) и локальный клиент Ollama."""
+    key = env.get("OPENAI_API_KEY")
+    cloud = openai.OpenAI(api_key=key) if key else None
+    local = openai.OpenAI(base_url=env.get("OLLAMA_BASE_URL", OLLAMA_URL), api_key="ollama")
+    return cloud, local
+
+
+def cloud_failed(outcome):
+    return outcome == "no_connection" or re.fullmatch(r"error_5\d\d", outcome) is not None
+
+
+def answer(query, films, cloud, local):
+    """Сначала облачная модель; если она недоступна, тот же запрос на локальной."""
+    if cloud is not None:
+        outcome, ids = pick(cloud, CLOUD_MODEL, query, films)
+        if not cloud_failed(outcome):
+            return outcome, ids, CLOUD_MODEL
+        print("Облако недоступно, пробуем локальную модель")
+    outcome, ids = pick(local, LOCAL_MODEL, query, films)
+    return outcome, ids, LOCAL_MODEL
+
+
 if __name__ == "__main__":
-    print("Использование: uv run kino.py \"запрос\"")
-    sys.exit(1)
+    if len(sys.argv) < 2:
+        print("Использование: uv run kino.py \"запрос\"")
+        sys.exit(1)
+    load_dotenv()
+    with open("films.json", encoding="utf-8") as file:
+        films = json.load(file)
+    cloud, local = make_clients(os.environ)
+    answer(sys.argv[1], films, cloud, local)
