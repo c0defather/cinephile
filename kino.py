@@ -182,12 +182,19 @@ def answer(query, films, cloud, local):
     return outcome, ids, LOCAL_MODEL
 
 
+def parse_args(argv):
+    """(только локальная модель?, запрос)."""
+    words = [word for word in argv if word != "--local"]
+    return "--local" in argv, " ".join(words)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Использование: uv run kino.py \"запрос\"")
+    local_only, query = parse_args(sys.argv[1:])
+    if not query:
+        print("Использование: uv run kino.py [--local] \"запрос\"")
         sys.exit(1)
     load_dotenv()
     with open("films.json", encoding="utf-8") as file:
         films = json.load(file)
     cloud, local = make_clients(os.environ)
-    answer(sys.argv[1], films, cloud, local)
+    answer(query, films, None if local_only else cloud, local)
