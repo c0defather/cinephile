@@ -62,6 +62,14 @@ def test_price_includes_every_call_of_a_request():
     assert total["m1"]["usd_per_request"] == 0.75
 
 
+def test_memory_experiment_is_not_a_request():
+    rows = [row(step="choice"), row(step="memory", usd=0.25)]
+    total = show.summarize(rows)
+    assert total["m1"]["requests"] == 1
+    assert total["m1"]["calls"] == 2
+    assert total["m1"]["outcomes"] == {"ok": 1}
+
+
 def test_empty_journal():
     assert show.summarize([]) == {}
 

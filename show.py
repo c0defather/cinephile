@@ -20,8 +20,9 @@ def summarize(rows):
         item["tokens_in"] += usage.get("prompt_tokens", 0)
         item["tokens_out"] += usage.get("completion_tokens", 0)
         item["usd"] += row.get("usd", 0)
-        # запрос кончается на choice; сорвавшийся filters тоже конец запроса
-        if row["step"] == "choice" or row["outcome"] != "ok":
+        # запрос кончается на choice; сорвавшийся filters тоже конец запроса;
+        # опыт с памятью (step memory) не запрос
+        if row["step"] == "choice" or (row["step"] == "filters" and row["outcome"] != "ok"):
             item["requests"] += 1
             item["outcomes"][row["outcome"]] = item["outcomes"].get(row["outcome"], 0) + 1
     for item in total.values():
