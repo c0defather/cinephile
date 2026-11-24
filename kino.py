@@ -89,6 +89,30 @@ def build_filter_messages(films, query):
             {"role": "user", "content": data}]
 
 
+def words(items):
+    return {item.strip().lower() for item in items or []}
+
+
+def matches(film, filters):
+    """Подходит ли один фильм под условия. Пустое поле условия не задаёт."""
+    if filters.max_minutes is not None and film["minutes"] > filters.max_minutes:
+        return False
+    if filters.year_from is not None and film["year"] < filters.year_from:
+        return False
+    if filters.year_to is not None and film["year"] > filters.year_to:
+        return False
+    genres, languages = set(film["genres"]), set(film["languages"])
+    if words(filters.languages) and not languages & words(filters.languages):
+        return False
+    if genres & words(filters.exclude_genres):
+        return False
+    return words(filters.must_genres) <= genres
+
+
+def apply_filters(films, filters):
+    return [film for film in films if matches(film, filters)]
+
+
 def build_messages(films, query):
     # source нужен человеку для проверки, модели он не нужен
     catalog = [{k: v for k, v in film.items() if k != "source"} for film in films]
