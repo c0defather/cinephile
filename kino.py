@@ -3,7 +3,8 @@ import sys
 import time
 from typing import Literal
 
-from pydantic import BaseModel
+import openai
+from pydantic import BaseModel, ValidationError
 
 LIMIT = 2000
 PRICE = {"gpt-6-luna": (0.10, 0.50), "gpt-6-astra": (10.00, 50.00)}  # $ за миллион токенов: вход, выход
@@ -89,9 +90,67 @@ def check_ids(picks, films):
     return None, []
 
 
-def pick(client, model, query, films):
-    """Подбор фильмов: пока заглушка, наполняется по шагам PLAN.md."""
-    return "no_match", []
+def show(film, why):
+    print(f"{film['title']} ({film['year']}), {film['minutes']} мин")
+    print(film["description"])
+    print(f"Почему: {why}\n")
+
+
+def pick(client, model, query, films, effort="none"):
+    """Подбор фильмов под запрос. Возвращает (исход, id показанных фильмов)."""
+    started = time.time()
+
+    def end(outcome, completion=None, rejected=None):
+        log(model, "choice", query, films, outcome, started, completion, rejected)
+        return outcome, []
+
+    try:
+        completion = client.chat.completions.parse(
+            model=model,
+            messages=build_messages(films, query),
+            response_format=Choice,
+            max_completion_tokens=LIMIT,
+            reasoning_effort=effort,
+        )
+    except openai.APIConnectionError:
+        print("Нет связи с сервером")
+        return end("no_connection")
+    except openai.APIStatusError as error:
+        print("Ошибка API:", error.message)
+        return end(f"error_{error.status_code}")
+    except openai.LengthFinishReasonError as error:
+        print("Ответ обрезан на лимите токенов")
+        return end("length", error.completion)
+    except openai.ContentFilterFinishReasonError:
+        print("Модель отказалась отвечать")
+        return end("refusal")
+    except ValidationError:
+        print("Ответ модели не по схеме")
+        return end("invalid", rejected=[])
+    if not completion.choices:
+        print("Пустой ответ модели")
+        return end("invalid", completion, [])
+    message = completion.choices[0].message
+    if message.refusal:
+        print("Модель отказалась:", message.refusal)
+        return end("refusal", completion)
+    choice = message.parsed
+    if choice is None:
+        print("Ответ модели не по схеме")
+        return end("invalid", completion, [])
+    if choice.status == "no_match":
+        print("Ничего не подходит:", choice.reason)
+        return end("no_match", completion)
+
+    problem, rejected = check_ids(choice.picks, films)
+    if problem:
+        print("Проверка ответа:", problem)
+        return end("invalid", completion, rejected)
+    by_id = {str(film["id"]): film for film in films}
+    for item in choice.picks:
+        show(by_id[str(item.film_id)], item.why)
+    log(model, "choice", query, films, "ok", started, completion)
+    return "ok", [by_id[str(item.film_id)]["id"] for item in choice.picks]
 
 
 if __name__ == "__main__":
