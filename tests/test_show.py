@@ -70,6 +70,19 @@ def test_memory_experiment_is_not_a_request():
     assert total["m1"]["outcomes"] == {"ok": 1}
 
 
+def test_seconds_are_summed_over_calls_of_a_request():
+    rows = [dict(row(step="filters"), seconds=10.0), dict(row(step="choice"), seconds=30.0),
+            dict(row(step="choice"), seconds=20.0)]
+    total = show.summarize(rows)
+    assert total["m1"]["seconds"] == 60.0
+    assert total["m1"]["seconds_per_request"] == 30.0
+
+
+def test_report_prints_seconds(capsys):
+    show.report(show.summarize([dict(row(), seconds=12.5)]))
+    assert "12.5" in capsys.readouterr().out
+
+
 def test_empty_journal():
     assert show.summarize([]) == {}
 

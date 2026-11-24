@@ -56,6 +56,9 @@ def fake_pick(script):
         outcome, ids = script[query]
         if outcome == "invalid":  # как настоящий pick: чужой id попал в журнал
             kino.log(model, "choice", query, films, "invalid", 0, rejected=["x-9"])
+        if outcome == "violation":  # фильм из каталога, но не под условия
+            kino.log(model, "choice", query, films, "invalid", 0, rejected=[], violations=["t-2", "t-3"])
+            return "invalid", []
         return outcome, ids
 
     pick.calls = calls
@@ -65,7 +68,7 @@ def fake_pick(script):
 def test_run_judges_every_query(monkeypatch):
     fake = fake_pick({"один": ("ok", ["t-1"]), "два": ("ok", ["t-2"]), "три": ("no_match", [])})
     monkeypatch.setattr(check, "pick", fake)
-    results, _ = check.run(QUERIES, [{"id": "t-1"}], "client", "model")
+    results, *_ = check.run(QUERIES, [{"id": "t-1"}], "client", "model")
     assert [r["passed"] for r in results] == [True, False, None]
     assert [r["outcome"] for r in results] == ["ok", "ok", "no_match"]
     assert [c[:2] for c in fake.calls] == [("client", "model")] * 3
@@ -74,15 +77,22 @@ def test_run_judges_every_query(monkeypatch):
 def test_run_counts_alien_ids_from_the_journal(monkeypatch):
     fake = fake_pick({"один": ("invalid", []), "два": ("invalid", []), "три": ("ok", ["t-1"])})
     monkeypatch.setattr(check, "pick", fake)
-    _, alien = check.run(QUERIES, [{"id": "t-1"}], "client", "model")
-    assert alien == 2
+    _, alien, violations = check.run(QUERIES, [{"id": "t-1"}], "client", "model")
+    assert (alien, violations) == (2, 0)
+
+
+def test_run_counts_violations_of_the_conditions(monkeypatch):
+    fake = fake_pick({"один": ("violation", []), "два": ("no_match", []), "три": ("violation", [])})
+    monkeypatch.setattr(check, "pick", fake)
+    _, alien, violations = check.run(QUERIES, [{"id": "t-1"}], "client", "model")
+    assert (alien, violations) == (0, 4)
 
 
 def test_old_journal_rows_are_not_counted(monkeypatch):
     kino.log("m", "choice", "старое", [{"id": "t-1"}], "invalid", 0, rejected=["x-1", "x-2"])
     fake = fake_pick({"один": ("ok", ["t-1"]), "два": ("no_match", []), "три": ("ok", ["t-1"])})
     monkeypatch.setattr(check, "pick", fake)
-    assert check.run(QUERIES, [{"id": "t-1"}], "client", "model")[1] == 0
+    assert check.run(QUERIES, [{"id": "t-1"}], "client", "model")[1:] == (0, 0)
 
 
 # ---------- report ----------
@@ -92,17 +102,18 @@ def test_report_counts_outcomes_and_picks_separately(capsys):
                {"query": "два", "outcome": "no_match", "ids": [], "passed": True},
                {"query": "три", "outcome": "ok", "ids": ["t-1"], "passed": None},
                {"query": "четыре", "outcome": "invalid", "ids": [], "passed": False}]
-    check.report(results, alien=3, model="qwen")
+    check.report(results, alien=3, violations=2, model="qwen")
     out = capsys.readouterr().out
     assert "qwen" in out
     assert "ok: 2" in out and "no_match: 1" in out and "invalid: 1" in out
     assert "Чужих id поймано: 3" in out
+    assert "Нарушений условий поймано: 2" in out
     assert "1 из 3" in out  # из трёх запросов с ожиданием пройден один
     assert "один" in out and "четыре" in out  # непройденные названы
 
 
 def test_report_without_expectations(capsys):
-    check.report([{"query": "а", "outcome": "ok", "ids": ["t-1"], "passed": None}], 0, "m")
+    check.report([{"query": "а", "outcome": "ok", "ids": ["t-1"], "passed": None}], 0, 0, "m")
     assert "ожиданий нет" in capsys.readouterr().out
 
 

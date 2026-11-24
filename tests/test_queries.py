@@ -42,6 +42,11 @@ def test_at_least_fifteen(queries):
     assert len(queries) >= 15
 
 
+def test_rare_has_thirty_queries_with_expectations(queries):
+    assert len(queries) >= 30
+    assert all(expect(q) for q in queries)
+
+
 def test_no_match_queries(queries):
     assert sum(1 for q in queries if expect(q).get("no_match")) >= 3
 

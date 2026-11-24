@@ -29,7 +29,7 @@ def journal_rows():
 
 
 def run(queries, films, client, model):
-    """Прогон набора через pick. Возвращает (результаты, число чужих id из журнала)."""
+    """Прогон набора через pick. Возвращает (результаты, чужие id, нарушения условий): числа из журнала."""
     before = len(journal_rows())
     results = []
     for item in queries:
@@ -38,10 +38,11 @@ def run(queries, films, client, model):
                         "passed": judge(item.get("expect"), outcome, ids)})
     new_rows = journal_rows()[before:]
     alien = sum(len(row.get("rejected", [])) for row in new_rows)
-    return results, alien
+    violations = sum(len(row.get("violations", [])) for row in new_rows)
+    return results, alien, violations
 
 
-def report(results, alien, model):
+def report(results, alien, violations, model):
     print(f"\nМодель: {model}, запросов {len(results)}")
     outcomes = {}
     for item in results:
@@ -49,6 +50,7 @@ def report(results, alien, model):
     for outcome, count in sorted(outcomes.items()):
         print(f"  {outcome}: {count}")
     print(f"Чужих id поймано: {alien}")
+    print(f"Нарушений условий поймано: {violations}")
     judged = [item for item in results if item["passed"] is not None]
     if not judged:
         print("Подбор: ожиданий нет")
@@ -76,5 +78,5 @@ if __name__ == "__main__":
         queries = json.load(file)
     cloud, local = make_clients(os.environ)
     client, model = choose(cloud, local, "--local" in sys.argv)
-    results, alien = run(queries, films, client, model)
-    report(results, alien, model)
+    results, alien, violations = run(queries, films, client, model)
+    report(results, alien, violations, model)
