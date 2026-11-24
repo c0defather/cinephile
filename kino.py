@@ -46,6 +46,22 @@ def build_messages(films, query):
             {"role": "user", "content": data}]
 
 
+def check_ids(picks, films):
+    """Проверка выбора модели кодом: (причина или None, отклонённые чужие id)."""
+    known = {str(film["id"]) for film in films}
+    ids = [str(item.film_id) for item in picks]
+    alien = [i for i in ids if i not in known]
+    if alien:
+        return "фильма нет в каталоге", alien
+    if not ids:
+        return "пустой выбор при status ok", []
+    if len(ids) != len(set(ids)):
+        return "повтор в выдаче", []
+    if len(ids) > 3:
+        return "больше трёх фильмов", []
+    return None, []
+
+
 def pick(client, model, query, films):
     """Подбор фильмов: пока заглушка, наполняется по шагам PLAN.md."""
     return "no_match", []
