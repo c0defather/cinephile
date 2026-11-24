@@ -7,7 +7,7 @@ from typing import Literal
 
 import openai
 from dotenv import load_dotenv
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, Field, ValidationError
 
 CLOUD_MODEL = "gpt-6-luna"
 LOCAL_MODEL = "qwen3.5:4b"
@@ -43,7 +43,7 @@ class Pick(BaseModel):
 class Choice(BaseModel):
     status: Literal["ok", "no_match"]
     reason: str
-    picks: list[Pick]
+    picks: list[Pick] = Field(max_length=3)  # maxItems в схеме: без него qwen иногда пишет 20 фильмов
 
 
 def build_messages(films, query):

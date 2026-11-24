@@ -7,6 +7,7 @@ import httpx2
 import openai
 import pytest
 from openai.types import CompletionUsage
+from pydantic import ValidationError
 
 from kino import Choice, pick
 
@@ -74,8 +75,27 @@ def test_repeat_is_invalid(capsys):
     assert FILMS[0]["title"] not in capsys.readouterr().out
 
 
-def test_four_films_are_invalid():
-    assert run(answer("t-1", "t-2", "t-3", "t-4"))[0] == ("invalid", [])
+FOUR = {"status": "ok", "reason": "", "picks": [{"film_id": f"t-{n}", "why": "причина"} for n in range(1, 5)]}
+
+
+def test_schema_does_not_allow_four_films():
+    with pytest.raises(ValidationError):
+        Choice.model_validate(FOUR)
+
+
+def test_schema_tells_the_model_about_the_limit():
+    """Без maxItems qwen3.5:4b иногда перечисляет 20 фильмов и не укладывается в время."""
+    assert Choice.model_json_schema()["properties"]["picks"]["maxItems"] == 3
+
+
+def test_four_films_from_the_model_are_invalid(capsys):
+    try:
+        Choice.model_validate(FOUR)
+    except ValidationError as error:
+        assert run(error)[0] == ("invalid", [])
+        assert FILMS[0]["title"] not in capsys.readouterr().out
+    else:
+        pytest.fail("схема приняла четыре фильма")
 
 
 def test_empty_ok_is_invalid():
