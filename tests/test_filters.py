@@ -68,3 +68,10 @@ def test_filter_instructions_name_the_rules():
     for field in FIELDS:
         assert field in text
     assert "null" in text or "None" in text
+
+
+def test_instructions_tell_to_keep_a_language_that_is_not_in_the_catalog():
+    """Иначе «на арабском» молча превращается в запрос без условий и уходит дорогим вызовом на весь каталог."""
+    text = build_filter_messages(FILMS, "q")[0]["content"]
+    assert "нет в <языки>" in text and "всё равно" in text
+    assert "Жанры пиши только словами из <жанры>" in text
