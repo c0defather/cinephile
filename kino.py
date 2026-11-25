@@ -263,6 +263,126 @@ def pick(client, model, query, films, effort="none"):
     return "ok", [by_id[str(item.film_id)]["id"] for item in choice.picks]
 
 
+# ---------- кандидаты для большого каталога: без модели ----------
+
+STOP = {"фильм", "фильмы", "кино", "что", "нибудь", "чтобы", "только", "хочу", "посоветуй", "какой", "есть",
+        "для", "про", "или", "как", "это", "его", "вечером", "смотреть", "интересный", "хороший"}
+NEGATION = {"не", "без", "кроме", "емес", "жоқ"}
+GENRE_STEMS = {  # слово каталога: начала слов запроса
+    "драма": ["драм"], "комедия": ["комед", "смешн", "күлкіл"], "боевик": ["боеви"], "приключения": ["приключ"],
+    "фантастика": ["фантаст"], "фэнтези": ["фэнтез"], "триллер": ["триллер"], "ужасы": ["ужас"],
+    "криминал": ["кримин"], "мелодрама": ["мелодр"], "военный": ["военн", "войн", "соғыс"],
+    "исторический": ["историч", "тарихи"], "биография": ["биогр"], "мультфильм": ["мульт"], "семейный": ["семейн", "отбасы"],
+    "детектив": ["детект"], "вестерн": ["вестер"], "мюзикл": ["мюзикл"]}
+KAZAKH = {"қазақ": "казахский", "орыс": "русский"}  # казахский запрос: язык называется по-казахски
+DECADES = {"двадцат": 1920, "тридцат": 1930, "сороков": 1940, "пятидесят": 1950, "шестидесят": 1960, "семидесят": 1970,
+           "восьмидесят": 1980, "девяност": 1990, "двухтысяч": 2000}
+NUMBERS = {"полутора": 90, "двух": 120, "ста": 100, "часа": 60, "трёх": 180, "трех": 180}
+UNKNOWN_LANGUAGES = ("арабск", "португальск", "греческ", "турецк", "польск", "шведск", "хинди")  # языки, которых может не быть
+
+
+SYNONYMS = {"совет": "ссср", "қазақстан": "казахстан", "голливуд": "сша", "американск": "сша", "россий": "россия",
+            "российск": "россия"}  # слова запроса, называющие страну каталога
+
+
+def tokens(text):
+    return re.findall(r"[a-zа-яёәғқңөұүһі0-9]+", text.lower())
+
+
+def query_words(query):
+    """Слова запроса; названия стран из SYNONYMS заменены словами каталога."""
+    return [next((name for prefix, name in SYNONYMS.items() if word.startswith(prefix)), word) for word in tokens(query)]
+
+
+def stem(word):
+    return word[:5]
+
+
+def max_minutes(query):
+    """Верхняя граница минут из слов «до полутора часов», «короче 95 минут», «не длиннее ста минут»."""
+    found = re.search(r"(?:до|короче|не длиннее|не более|менее)\s+(\d+|полутора|двух|трёх|трех|ста|часа)\s*(минут|мин|час\w*)?",
+                      query.lower())
+    if not found:
+        return None
+    number, unit = found.group(1), found.group(2) or ""
+    if number.isdigit():
+        value = int(number)
+        if unit.startswith("час"):
+            return value * 60
+        return None if value >= 1000 else value  # «до 2000»: это год
+    return NUMBERS[number]
+
+
+def years(query):
+    """(год «с», год «по») из «после 2010», «до 2000», «семидесятых годов», «90-х»."""
+    text = query.lower()
+    first = last = None
+    if found := re.search(r"после\s+(\d{4})", text):
+        first = int(found.group(1)) + 1
+    if found := re.search(r"до\s+(\d{4})(?!\s*(?:мин|час))", text):
+        last = int(found.group(1))
+    for prefix, start in DECADES.items():
+        if prefix in text:
+            first, last = start, start + 9
+    if found := re.search(r"\b(\d0)-х", text):
+        start = int(found.group(1)) + (1900 if int(found.group(1)) >= 20 else 2000)
+        first, last = start, start + 9
+    return first, last
+
+
+def candidates(query, films, k=30):
+    """До k id из films без вызова модели: жёсткие фильтры по минутам, годам, языку, жанрам после «не»,
+    затем рейтинг по жанрам, странам и словам описания. Язык запроса и описаний русский (путь описан в README)."""
+    words_ = query_words(query)
+    limit = max_minutes(query)
+    first, last = years(query)
+    known = {word for film in films for word in film.get("languages", [])}
+    wanted_languages = {language for language in known for word in words_
+                        if len(word) >= 4 and word.startswith(language[:max(4, len(language) - 2)].lower())}
+    if "тіл" in words_ or "тілінде" in words_ or "тіліндегі" in words_:
+        wanted_languages |= {name for prefix, name in KAZAKH.items() for word in words_ if word.startswith(prefix)}
+    asked_unknown = not wanted_languages and any(word.startswith(UNKNOWN_LANGUAGES) for word in words_)
+    excluded, penalty, wanted_genres = set(), set(), set()
+    for number, word in enumerate(words_):
+        genres_here = {name for name, parts in GENRE_STEMS.items() if any(word.startswith(p) for p in parts)}
+        negated = (any(back in NEGATION for back in words_[max(0, number - 2):number])
+                   or words_[number + 1:number + 2] in (["емес"], ["жоқ"]))
+        if genres_here and negated:
+            excluded |= genres_here
+        elif genres_here:
+            wanted_genres |= genres_here
+        elif negated and len(word) >= 3 and word not in STOP and word not in NEGATION:
+            penalty.add(stem(word))
+    terms = [stem(w) for w in words_ if len(w) > 3 and w not in STOP and w not in NEGATION and stem(w) not in penalty]
+
+    def allowed(film):
+        if limit is not None and film["minutes"] > limit:
+            return False
+        if first is not None and film["year"] < first or last is not None and film["year"] > last:
+            return False
+        if wanted_languages and not set(film.get("languages", [])) & wanted_languages:
+            return False
+        return not excluded & set(film.get("genres", []))
+
+    if asked_unknown:
+        return []
+    pool = [film for film in films if allowed(film)]
+    texts = {str(film["id"]): {stem(w) for w in tokens(film["title"] + " " + film.get("description", ""))} for film in pool}
+    weight = {t: 1 + 3 / (1 + sum(t in found for found in texts.values())) for t in set(terms)}
+
+    def score(film):
+        found = texts[str(film["id"])]
+        value = sum(weight[t] for t in terms if t in found)
+        value += 3 * len(wanted_genres & set(film.get("genres", [])))
+        countries = {stem(w) for c in film.get("countries", []) for w in tokens(c)}
+        value += 2 * len(set(terms) & countries)
+        value -= 5 * len(penalty & (found | countries))
+        return value
+
+    ranked = sorted(pool, key=lambda film: -score(film))
+    return [film["id"] for film in ranked[:k]]
+
+
 def make_clients(env):
     """Облачный клиент (None без ключа) и локальный клиент Ollama."""
     key = env.get("OPENAI_API_KEY")
