@@ -410,6 +410,55 @@ def candidates(query, films, k=30):
     return [film["id"] for film in ranked[:k]]
 
 
+MORE = {"ещё", "еще", "more"}
+SEEN = re.compile(r"уже\s+(смотрел[аи]?|видел[аи]?)|(смотрел[аи]?|видел[аи]?)\s+уже|не\s+(надо|хочу)|кроме|\bсмотрел[аи]?\b|\bвидел[аи]?\b", re.IGNORECASE)
+
+
+def new_dialog():
+    """Состояние разговора: запрос, показанные фильмы (id), исключённые фильмы (id), ждём ли ответ на вопрос."""
+    return {"query": None, "shown": [], "excluded": [], "asked": False}
+
+
+def fold(text):
+    return text.lower().replace("ё", "е")
+
+
+def talk(client, model, state, text, films):
+    """Одна реплика пользователя: «ещё», исключение («уже смотрел …») или запрос. Возвращает (исход, ids)."""
+    text = text.strip()
+    heard = [f for f in films if fold(f["title"]) in fold(text)]
+    left = SEEN.sub(" ", fold(text))
+    for film in heard:
+        left = left.replace(fold(film["title"]), " ")
+    left = re.sub(r"[\W_]+", " ", left).strip()
+    if heard and SEEN.search(text):  # исключение действует до конца разговора
+        state["excluded"] += [f["id"] for f in heard if f["id"] not in state["excluded"]]
+        print("Учту:", ", ".join(f["title"] for f in heard))
+        if not left:
+            if state["query"] is None:
+                return "excluded", []
+            text = "ещё"
+    if re.sub(r"[\W_]+", "", fold(text)) in MORE:
+        if state["query"] is None:
+            print("Сначала опишите, какой фильм нужен.")
+            return "no_query", []
+        query = state["query"]
+    elif state["asked"]:
+        query = f"{state['query']}. {text}"  # ответ на уточняющий вопрос дополняет запрос
+    else:
+        query = text
+    state["query"] = query
+    hidden = set(state["shown"]) | set(state["excluded"])
+    available = [f for f in films if f["id"] not in hidden]
+    if not available:
+        print("Фильмы в каталоге закончились.")
+        return "exhausted", []
+    outcome, ids = pick(client, model, query, available)
+    state["asked"] = outcome == "clarify"
+    state["shown"] += ids
+    return outcome, ids
+
+
 def make_clients(env):
     """Облачный клиент (None без ключа) и локальный клиент Ollama."""
     key = env.get("OPENAI_API_KEY")
