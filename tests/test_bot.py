@@ -145,3 +145,31 @@ def test_main_without_a_token_stops_with_a_hint(monkeypatch, capsys):
     with pytest.raises(SystemExit):
         bot.main([])
     assert "TELEGRAM_BOT_TOKEN" in capsys.readouterr().out
+
+
+def test_local_only_bot_never_touches_the_cloud_and_uses_the_local_model():
+    """Путь за $0 (шаг 29): с --local облачного клиента нет, ушла qwen3.5:4b."""
+    local = Client(answer("t-2"))
+    bot_ = bot.Bot(FILMS, None, local)
+    assert "Проверочный фильм 2" in bot_.reply(1, "кино")
+    assert local.kwargs["model"] == bot.LOCAL_MODEL == "qwen3.5:4b"
+    assert local.kwargs["reasoning_effort"] == "none"  # иначе один вызов идёт минуты
+
+
+def test_main_local_flag_leaves_no_cloud_client(monkeypatch):
+    seen = {}
+
+    class Stop(Exception):
+        pass
+
+    def fake_poll(self, api, offset):
+        seen["cloud"] = self.cloud
+        raise Stop
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", TOKEN)
+    monkeypatch.setenv("OPENAI_API_KEY", "x" * 12)
+    monkeypatch.setattr(bot, "load_dotenv", lambda *a, **k: None)
+    monkeypatch.setattr(bot.Bot, "poll", fake_poll)
+    monkeypatch.chdir(bot.__file__.rsplit("/", 1)[0])  # films.json лежит рядом с bot.py
+    with pytest.raises(Stop):
+        bot.main(["--local"])
+    assert seen["cloud"] is None
