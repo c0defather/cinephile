@@ -56,10 +56,11 @@ uv run check.py                                              # прогон quer
 uv run check.py --local                                      # то же на qwen3.5:4b
 uv run show.py                                               # итоги по журналу calls.jsonl
 uv run memory_test.py [--local]                              # опыт с памятью модели
-uv run pytest -q                                             # 182 теста, без сети
+uv run pytest -q                                             # 216 тестов, без сети
 uv run build_catalog.py                                      # пересборка films.json из Wikidata
 uv run build_big.py                                          # пересборка films_big.json
 uv run big.py [--run]                                        # замеры Epic (--run: облако, около $0.5)
+uv run bot.py [--local]                                      # Telegram-бот (TELEGRAM_BOT_TOKEN в .env)
 ```
 
 ## Как работает подбор (Rare)
@@ -330,6 +331,7 @@ $0.0081–$0.0085 за 30 запросов, то есть около $0.00028 з
 |---|---|
 | `kino.py` | схема ответа, промпт, `pick`, журнал, запуск |
 | `check.py` | прогон `queries.json`, подсчёт исходов и подбора |
+| `bot.py` | Telegram-бот: диалог `talk()` из `kino.py`, Bot API без библиотек |
 | `big.py` | замеры Epic: кандидаты и весь каталог в промпте |
 | `show.py` | итоги по `calls.jsonl` |
 | `memory_test.py` | опыт с памятью модели |
