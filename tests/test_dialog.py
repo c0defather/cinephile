@@ -109,3 +109,36 @@ def test_more_spellings(word):
     state = new_dialog()
     say(Client(answer("t-1")), state, "кино")
     assert say(Client(answer("t-2")), state, word) == ("ok", ["t-2"])
+
+
+def test_first_request_may_clarify_but_the_answer_to_a_question_may_not():
+    """Живой случай qwen3.5:4b: на «комедия» после вопроса модель спросила снова (замер шага 29)."""
+    from kino import Choice, FinalChoice
+    state = new_dialog()
+    first = Client(answer(status="clarify"))
+    say(first, state, "посоветуй фильм")
+    assert first.kwargs["response_format"] is Choice
+    second = Client(answer("t-1"))
+    say(second, state, "комедия")
+    assert second.kwargs["response_format"] is FinalChoice
+    assert "Уточнять нельзя" in prompt(second)
+    third = Client(answer("t-2"))
+    say(third, state, "ещё")  # вопрос задан и отвечен: уточнять снова можно
+    assert third.kwargs["response_format"] is Choice and "Уточнять нельзя" not in prompt(third)
+
+
+def test_second_clarify_in_a_row_is_invalid_not_shown(capsys):
+    state = new_dialog()
+    say(Client(answer(status="clarify")), state, "посоветуй фильм")
+    outcome, ids = say(Client(answer(status="clarify")), state, "комедия")
+    assert (outcome, ids) == ("invalid", [])
+    assert not state["asked"]  # вопросы по кругу не копятся
+
+
+def test_final_choice_schema_has_no_clarify():
+    from kino import FinalChoice
+    import pytest
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        FinalChoice.model_validate({"status": "clarify", "reason": "?", "picks": []})
+    assert FinalChoice.model_validate({"status": "no_match", "reason": "нет", "picks": []})

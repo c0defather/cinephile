@@ -49,6 +49,15 @@ class Choice(BaseModel):
     picks: list[Pick] = Field(max_length=3)  # maxItems в схеме: без него qwen иногда пишет 20 фильмов
 
 
+class FinalChoice(BaseModel):
+    """Схема без clarify: после уточняющего вопроса модель обязана подобрать фильм или сказать no_match."""
+    status: Literal["ok", "no_match"]
+    reason: str
+    picks: list[Pick] = Field(max_length=3)
+
+
+NO_CLARIFY = "\n\nУточнять нельзя: пользователь уже ответил на вопрос. status clarify не используй, подбирай по тому, что есть."
+
 FILTER_INSTRUCTIONS = """Ты разбираешь запрос о фильме в условия отбора. Каталога у тебя нет,
 есть только списки жанров и языков каталога.
 
@@ -118,12 +127,12 @@ def apply_filters(films, filters):
     return [film for film in films if matches(film, filters)]
 
 
-def build_messages(films, query):
+def build_messages(films, query, clarify=True):
     # source нужен человеку для проверки, модели он не нужен
     catalog = [{k: v for k, v in film.items() if k != "source"} for film in films]
     data = (f"<каталог>{json.dumps(catalog, ensure_ascii=False)}</каталог>\n"
             f"<запрос>{query}</запрос>")
-    return [{"role": "system", "content": INSTRUCTIONS},
+    return [{"role": "system", "content": INSTRUCTIONS + ("" if clarify else NO_CLARIFY)},
             {"role": "user", "content": data}]
 
 
@@ -214,7 +223,7 @@ def call(client, model, messages, schema, effort):
     return "ok", completion
 
 
-def pick(client, model, query, films, effort="none"):
+def pick(client, model, query, films, effort="none", clarify=True):
     """Подбор фильмов под запрос. Возвращает (исход, id показанных фильмов).
 
     Первый вызов (filters) разбирает условия, код отбирает фильмы, второй (choice) выбирает среди них."""
@@ -233,10 +242,10 @@ def pick(client, model, query, films, effort="none"):
         return "no_match", []
     log(model, "filters", query, films, "ok", started, completion)
 
-    return choose(client, model, query, candidates, films, filters, effort)
+    return choose(client, model, query, candidates, films, filters, effort, clarify)
 
 
-def choose(client, model, query, candidates, films, filters, effort):
+def choose(client, model, query, candidates, films, filters, effort, clarify=True):
     """Второй вызов: выбор среди candidates и все проверки ответа. filters нет для большого каталога."""
     started = time.time()
 
@@ -244,7 +253,8 @@ def choose(client, model, query, candidates, films, filters, effort):
         log(model, "choice", query, candidates, outcome, started, completion, rejected, violations)
         return outcome, []
 
-    outcome, completion = call(client, model, build_messages(candidates, query), Choice, effort)
+    outcome, completion = call(client, model, build_messages(candidates, query, clarify),
+                               Choice if clarify else FinalChoice, effort)
     if outcome == "invalid":
         return end(outcome, completion, [])
     if outcome != "ok":
@@ -254,6 +264,9 @@ def choose(client, model, query, candidates, films, filters, effort):
         print("Ничего не подходит:", choice.reason)
         return end("no_match", completion)
 
+    if choice.status == "clarify" and not clarify:  # вопрос уже задан, второй подряд это сбой модели
+        print("Проверка ответа: повторный уточняющий вопрос")
+        return end("invalid", completion, [])
     if choice.status == "clarify":  # один вопрос вместо фильмов: фильмы при этом статусе это ошибка модели
         if choice.picks or not choice.reason.strip():
             print("Проверка ответа: clarify без вопроса или с фильмами")
@@ -454,7 +467,7 @@ def talk(client, model, state, text, films):
     if not available:
         print("Фильмы в каталоге закончились.")
         return "exhausted", []
-    outcome, ids = pick(client, model, query, available)
+    outcome, ids = pick(client, model, query, available, clarify=not state["asked"])
     state["asked"] = outcome == "clarify"
     state["shown"] += ids
     return outcome, ids
