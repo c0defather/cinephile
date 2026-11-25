@@ -39,3 +39,8 @@ def test_clarify_is_logged(tmp_path):
 
 def test_instructions_tell_when_to_clarify():
     assert "clarify" in INSTRUCTIONS
+
+
+def test_instructions_keep_no_match_for_a_film_that_is_not_in_the_catalog():
+    """Без этого запрос «посоветуй Аватар 7» уходил в clarify вместо no_match (замер шага 28)."""
+    assert "конкретный фильм" in INSTRUCTIONS and "status no_match" in INSTRUCTIONS.split("конкретный фильм")[1]
