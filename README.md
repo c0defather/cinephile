@@ -56,7 +56,7 @@ uv run check.py                                              # прогон quer
 uv run check.py --local                                      # то же на qwen3.5:4b
 uv run show.py                                               # итоги по журналу calls.jsonl
 uv run memory_test.py [--local]                              # опыт с памятью модели
-uv run pytest -q                                             # 216 тестов, без сети
+uv run pytest -q                                             # 223 теста, без сети
 uv run build_catalog.py                                      # пересборка films.json из Wikidata
 uv run build_big.py                                          # пересборка films_big.json
 uv run big.py [--run]                                        # замеры Epic (--run: облако, около $0.5)
@@ -324,6 +324,12 @@ gpt-6-luna: запросов 223, вызовов 310
 В Rare промпт выбора содержит только кандидатов, поэтому запрос на `gpt-6-luna` стал дешевле: по трём прогонам
 $0.0081–$0.0085 за 30 запросов, то есть около $0.00028 за запрос против $0.00064 в Common. Второй вызов (разбор условий)
 дорог лишь числом вызовов, сам он короткий: в нём нет каталога.
+
+## Процесс
+
+SPEC.md, AGENTS.md и PLAN.md написаны до кода; каждый шаг PLAN.md это тест, затем код, затем один коммит с номером шага.
+Перед коммитом работает `pre-commit` (`uv run --with pre-commit pre-commit install`): нет ключей `sk-...`, нет `.env`,
+`uv run pytest -q` зелёный. На GitHub то же делает `.github/workflows/ci.yml`; ключей у CI нет, модель в тестах заменена заглушкой.
 
 ## Структура
 

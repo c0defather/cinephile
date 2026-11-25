@@ -1,0 +1,22 @@
+# Перед каждым коммитом: ключей и .env в коммите нет, тесты зелёные.
+# Включение: uv run --with pre-commit pre-commit install
+repos:
+  - repo: local
+    hooks:
+      - id: no-api-keys
+        name: в коммите нет ключей sk-...
+        language: pygrep
+        entry: sk-[A-Za-z0-9_-]{20,}
+        types: [text]
+        exclude: ^uv\.lock$
+      - id: no-env-file
+        name: .env не коммитится
+        language: fail
+        entry: .env с ключами нельзя класть в git
+        files: (^|/)\.env$
+      - id: pytest
+        name: uv run pytest -q
+        language: system
+        entry: uv run pytest -q
+        pass_filenames: false
+        always_run: true
