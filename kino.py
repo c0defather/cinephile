@@ -230,6 +230,11 @@ def pick(client, model, query, films, effort="none"):
         return "no_match", []
     log(model, "filters", query, films, "ok", started, completion)
 
+    return choose(client, model, query, candidates, films, filters, effort)
+
+
+def choose(client, model, query, candidates, films, filters, effort):
+    """Второй вызов: выбор среди candidates и все проверки ответа. filters нет для большого каталога."""
     started = time.time()
 
     def end(outcome, completion=None, rejected=None, violations=None):
@@ -248,10 +253,12 @@ def pick(client, model, query, films, effort="none"):
 
     problem, rejected = check_ids(choice.picks, films)  # чужие id: по всему каталогу
     violations = []
+    by_id = {str(film["id"]): film for film in films}
     if not problem:
-        by_id = {str(film["id"]): film for film in films}
+        offered = {str(film["id"]) for film in candidates}
         violations = [str(item.film_id) for item in choice.picks
-                      if not matches(by_id[str(item.film_id)], filters)]  # пересверка с условиями
+                      if str(item.film_id) not in offered  # настоящий фильм, но модели его не показывали
+                      or filters is not None and not matches(by_id[str(item.film_id)], filters)]  # пересверка с условиями
         if violations:
             problem = "фильм не подходит под условия запроса"
     if problem:
@@ -261,6 +268,17 @@ def pick(client, model, query, films, effort="none"):
         show(by_id[str(item.film_id)], item.why)
     log(model, "choice", query, candidates, "ok", started, completion)
     return "ok", [by_id[str(item.film_id)]["id"] for item in choice.picks]
+
+
+def pick_big(client, model, query, films, effort="none", k=30):
+    """Как pick для каталога больше промпта: кандидатов отбирает код (candidates), модель выбирает среди них."""
+    ids = set(candidates(query, films, k))
+    shown = [film for film in films if film["id"] in ids]
+    if not shown:
+        print("Ничего не подходит: в каталоге нет фильмов под условия запроса")
+        log(model, "choice", query, [], "no_match", time.time())
+        return "no_match", []
+    return choose(client, model, query, shown, films, None, effort)
 
 
 # ---------- кандидаты для большого каталога: без модели ----------
