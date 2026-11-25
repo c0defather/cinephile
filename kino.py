@@ -25,6 +25,8 @@ INSTRUCTIONS = """Ты помощник по выбору фильма. Нужн
 3. Условия запроса соблюдаются полностью: «не», «без», «кроме», длительность, язык, страна.
 4. Для каждого фильма в why одна короткая причина, почему он подходит.
 5. Если в каталоге ничего не подходит, status no_match, причина в reason, picks пустой.
+6. Если в <запрос> нет ни одного условия (жанр, настроение, язык, длительность, год, страна, актёр), status clarify:
+в reason один короткий уточняющий вопрос, picks пустой. Если хоть одно условие есть, выбирай фильм, не переспрашивай.
 Не предлагай фильмы, которых в каталоге нет.
 
 Пример:
@@ -41,7 +43,7 @@ class Pick(BaseModel):
 
 
 class Choice(BaseModel):
-    status: Literal["ok", "no_match"]
+    status: Literal["ok", "no_match", "clarify"]
     reason: str
     picks: list[Pick] = Field(max_length=3)  # maxItems в схеме: без него qwen иногда пишет 20 фильмов
 
@@ -250,6 +252,13 @@ def choose(client, model, query, candidates, films, filters, effort):
     if choice.status == "no_match":
         print("Ничего не подходит:", choice.reason)
         return end("no_match", completion)
+
+    if choice.status == "clarify":  # один вопрос вместо фильмов: фильмы при этом статусе это ошибка модели
+        if choice.picks or not choice.reason.strip():
+            print("Проверка ответа: clarify без вопроса или с фильмами")
+            return end("invalid", completion, [])
+        print("Уточните запрос:", choice.reason)
+        return end("clarify", completion)
 
     problem, rejected = check_ids(choice.picks, films)  # чужие id: по всему каталогу
     violations = []
